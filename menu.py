@@ -115,7 +115,7 @@ class Menu:
                     print(f"Buscando obras por nacionalidad: {nacionalidad}")
                     
                     try:
-                        
+
                         url = f"https://collectionapi.metmuseum.org/public/collection/v1/search?q={nacionalidad}"
                         informacion_url = requests.get(url)
                         informacion_url.raise_for_status()
@@ -123,24 +123,7 @@ class Menu:
                         
                         if data.get("objectIDs"):
                             
-                            nacionalidades_filtradas = []
-                            
-                            for i in data["objectIDs"]:
-                                
-                                try:
-                                    url = f"https://collectionapi.metmuseum.org/public/collection/v1/objects/{i}"
-                                    informacion_url = requests.get(url)
-                                    informacion_url.raise_for_status()
-                                    data = informacion_url.json()
-                                    
-                                    if data.get("artistNationality").lower() == nacionalidad.lower():
-                                        nacionalidades_filtradas.append(i)
-                                
-                                except (requests.exceptions.RequestException, json.JSONDecodeError) as e:
-                                    
-                                    continue
-                                
-                            self.funcionalidades.mostrar_obras_paginadas(nacionalidades_filtradas)
+                            self.funcionalidades.mostrar_obras_paginadas(data["objectIDs"])
                             
                         else:
                             
